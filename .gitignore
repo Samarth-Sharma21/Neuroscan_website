@@ -47,3 +47,6 @@ next-env.d.ts
 # model files (large binary)
 /model/
 __pycache__/
+
+# Local Netlify folder
+.netlify
