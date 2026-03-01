@@ -81,11 +81,10 @@ export default function AuthPage() {
           data: { user },
         } = await supabase.auth.getUser();
         if (user) {
-          await supabase.from('neuroscan_profiles').upsert({
-            id: user.id,
-            email: user.email,
-            full_name: user.user_metadata?.full_name || '',
-          });
+          const upsertData = { id: user.id, email: user.email };
+          const metaName = user.user_metadata?.full_name;
+          if (metaName) upsertData.full_name = metaName;
+          await supabase.from('neuroscan_profiles').upsert(upsertData);
         }
         router.push('/upload');
       }
