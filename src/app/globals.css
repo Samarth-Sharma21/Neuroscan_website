@@ -387,6 +387,12 @@
       0 1px 0 rgba(255, 255, 255, 0.9) inset;
   }
   .header-logo {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
     font-family: var(--font-display, 'DM Sans', system-ui, sans-serif);
 
     font-size: 1.05rem;
@@ -398,6 +404,17 @@
     color: var(--foreground);
 
     white-space: nowrap;
+  }
+  .header-logo-mark {
+    width: 28px;
+
+    height: 28px;
+
+    display: block;
+
+    flex: 0 0 auto;
+
+    object-fit: contain;
   }
   .header-logo span {
     color: var(--accent);

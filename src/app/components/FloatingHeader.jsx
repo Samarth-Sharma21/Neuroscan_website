@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabase';
@@ -96,9 +98,16 @@ export default function FloatingHeader() {
     <>
       <header className='floating-header' id='floating-header'>
         {/* Logo */}
-        <a href='/' className='header-logo' style={{ textDecoration: 'none' }}>
+        <Link href='/' className='header-logo' style={{ textDecoration: 'none' }}>
+          <Image
+            src='/neuroscan-logo4.png'
+            alt=''
+            className='header-logo-mark'
+            width={28}
+            height={28}
+          />
           Neuro<span>scan</span>
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className='header-nav-desktop'>
@@ -242,9 +251,16 @@ export default function FloatingHeader() {
             ref={mobileMenuRef}
             onClick={(e) => e.stopPropagation()}>
             <div className='mobile-menu-header'>
-              <a href='/' className='header-logo' style={{ textDecoration: 'none' }}>
+              <Link href='/' className='header-logo' style={{ textDecoration: 'none' }}>
+                <Image
+                  src='/neuroscan-logo4.png'
+                  alt=''
+                  className='header-logo-mark'
+                  width={28}
+                  height={28}
+                />
                 Neuro<span>scan</span>
-              </a>
+              </Link>
               <button
                 className='mobile-menu-close'
                 onClick={() => setMobileMenuOpen(false)}
