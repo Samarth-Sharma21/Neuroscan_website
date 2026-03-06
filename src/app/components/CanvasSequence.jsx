@@ -5,12 +5,17 @@ import { useEffect, useRef, useCallback, useState } from "react";
 const TOTAL_FRAMES = 240;
 const FRAME_PATH = "/brain-frames/frame_";
 
+/* ── Detect mobile for adaptive loading ── */
+const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
 /* ── Prioritized loading config ── */
-// Load critical frames first (every Nth), then fill in the rest
-const PRIORITY_STEP = 8;   // First pass: every 8th frame (30 frames)
-const SECONDARY_STEP = 4;  // Second pass: every 4th frame gap fills
-const BATCH_SIZE = 6;      // Concurrent requests per batch
-const BATCH_DELAY = 30;    // ms between batches
+// On mobile: load every 2nd frame (120 frames total) for faster load
+const FRAME_STEP = isMobile ? 2 : 1;       // Skip every other frame on mobile
+const ACTIVE_FRAMES = Math.ceil(TOTAL_FRAMES / FRAME_STEP);
+const PRIORITY_STEP = isMobile ? 12 : 8;   // First pass spacing
+const SECONDARY_STEP = isMobile ? 6 : 4;   // Second pass spacing
+const BATCH_SIZE = isMobile ? 4 : 6;       // Smaller batches on mobile
+const BATCH_DELAY = isMobile ? 50 : 30;    // More breathing room on mobile
 
 function padNumber(num, size) {
   let s = String(num);
@@ -104,10 +109,13 @@ export default function CanvasSequence({ heroRef }) {
     const scrollEnd = scrollStart + hero.offsetHeight - window.innerHeight;
     const raw = (window.scrollY - scrollStart) / (scrollEnd - scrollStart);
     const progress = Math.min(Math.max(raw, 0), 1);
-    const frameIndex = Math.min(
+    // Snap to nearest frame that was actually loaded (respecting FRAME_STEP)
+    let frameIndex = Math.min(
       Math.floor(progress * (TOTAL_FRAMES - 1)),
       TOTAL_FRAMES - 1
     );
+    // Round down to nearest frame we loaded
+    frameIndex = Math.floor(frameIndex / FRAME_STEP) * FRAME_STEP;
 
     if (frameIndex !== currentFrameRef.current) {
       currentFrameRef.current = frameIndex;
@@ -162,7 +170,7 @@ export default function CanvasSequence({ heroRef }) {
 
     // Phase 2: Priority frames (every Nth) for smooth skeleton playback
     const priorityFrames = [];
-    for (let i = 1; i <= TOTAL_FRAMES; i += PRIORITY_STEP) {
+    for (let i = 1; i <= TOTAL_FRAMES; i += PRIORITY_STEP * FRAME_STEP) {
       if (i !== 1) priorityFrames.push(i); // Skip #1, already loaded
     }
 
@@ -174,7 +182,7 @@ export default function CanvasSequence({ heroRef }) {
 
     // Phase 3: Secondary frames (fill gaps)
     const secondaryFrames = [];
-    for (let i = 1; i <= TOTAL_FRAMES; i += SECONDARY_STEP) {
+    for (let i = 1; i <= TOTAL_FRAMES; i += SECONDARY_STEP * FRAME_STEP) {
       if (!loadedSetRef.current.has(i - 1)) secondaryFrames.push(i);
     }
 
@@ -184,9 +192,9 @@ export default function CanvasSequence({ heroRef }) {
       if (b > 0) await new Promise(r => setTimeout(r, BATCH_DELAY));
     }
 
-    // Phase 4: Remaining frames
+    // Phase 4: Remaining frames (at FRAME_STEP intervals)
     const remaining = [];
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+    for (let i = 1; i <= TOTAL_FRAMES; i += FRAME_STEP) {
       if (!loadedSetRef.current.has(i - 1)) remaining.push(i);
     }
 
