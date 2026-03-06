@@ -1,6 +1,19 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabase';
+
 export default function HeroContent() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+  }, []);
+
+  const uploadHref = user ? '/upload' : '/auth';
+
   return (
     <div className='hero-content-layer'>
       <div className='hero-content-inner'>
@@ -23,7 +36,7 @@ export default function HeroContent() {
 
         {/* Action buttons */}
         <div className='hero-buttons'>
-          <a href='/upload' className='btn-primary' id='hero-upload-btn'>
+          <a href={uploadHref} className='btn-primary' id='hero-upload-btn'>
             <svg
               width='16'
               height='16'

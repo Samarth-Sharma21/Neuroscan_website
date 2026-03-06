@@ -1,6 +1,19 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabase';
+
 export default function CTASection() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+  }, []);
+
+  const uploadHref = user ? '/upload' : '/auth';
+
   return (
     <section className="cta-section" id="cta">
       <div className="cta-card">
@@ -18,11 +31,11 @@ export default function CTASection() {
         <h2>See the model in action</h2>
         <p>
           Upload a brain MRI scan and view the classification output along with
-          an attention heatmap — no setup or account needed.
+          an attention heatmap — sign in to get started.
         </p>
         
         <div className="cta-actions">
-          <a href="/upload" className="cta-btn-primary" id="cta-upload-btn">
+          <a href={uploadHref} className="cta-btn-primary" id="cta-upload-btn">
             <svg
               width="18"
               height="18"

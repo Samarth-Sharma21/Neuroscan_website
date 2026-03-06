@@ -76,7 +76,7 @@ export default function FloatingHeader() {
             </a>
           </li>
           <li>
-            <a href='/doctors'>Doctors</a>
+            <a href={loaded && user ? '/doctors' : '/auth'}>Doctors</a>
           </li>
           {loaded && user && (
             <li>

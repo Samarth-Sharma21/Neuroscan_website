@@ -1,7 +1,26 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabase';
+
 export default function Footer() {
   const year = new Date().getFullYear();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Auth-aware link: if logged in, go to target; otherwise go to /auth
+  const authHref = (target) => (user ? target : '/auth');
 
   return (
     <footer className='site-footer' id='footer'>
@@ -34,10 +53,10 @@ export default function Footer() {
                 <a href='#how-it-works'>How It Works</a>
               </li>
               <li>
-                <a href='/upload'>Upload MRI</a>
+                <a href={authHref('/upload')}>Upload MRI</a>
               </li>
               <li>
-                <a href='/doctors'>Doctor Support</a>
+                <a href={authHref('/doctors')}>Doctor Support</a>
               </li>
             </ul>
           </div>

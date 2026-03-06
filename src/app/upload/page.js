@@ -27,53 +27,56 @@ export default function UploadPage() {
   const inputRef = useRef(null);
   const resultsRef = useRef(null);
 
-  // Check auth for auto-saving reports
+  const [authChecked, setAuthChecked] = useState(false);
+
+  // Check auth — redirect to /auth if not signed in
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        const metadataName = session.user.user_metadata?.full_name || '';
-        const emailName = (session.user.email || '').split('@')[0] || '';
-        const initialName = metadataName || emailName;
-        setProfileName(initialName);
-        setPatientName(initialName);
+      if (!session?.user) {
+        // Not signed in — redirect to auth page
+        window.location.href = '/auth';
+        return;
       }
-      // Pre-fill patient name from profile if logged in
-      if (session?.user) {
-        supabase
-          .from('neuroscan_profiles')
-          .select(
-            'full_name, age, sex, date_of_birth, blood_group, known_conditions, current_medications, allergies, family_history, clinical_notes',
-          )
-          .eq('id', session.user.id)
-          .single()
-          .then(({ data: prof }) => {
-            if (!prof) return;
-            const metadataName = session.user.user_metadata?.full_name || '';
-            const emailName = (session.user.email || '').split('@')[0] || '';
-            const resolvedName = prof.full_name || metadataName || emailName;
-            setProfileName(resolvedName);
-            setPatientName(resolvedName);
-            setProfileDetails({
-              age: prof.age,
-              sex: prof.sex,
-              date_of_birth: prof.date_of_birth,
-              blood_group: prof.blood_group,
-              known_conditions: prof.known_conditions,
-              current_medications: prof.current_medications,
-              allergies: prof.allergies,
-              family_history: prof.family_history,
-              clinical_notes: prof.clinical_notes,
-            });
+      setUser(session.user);
+      setAuthChecked(true);
+
+      const metadataName = session.user.user_metadata?.full_name || '';
+      const emailName = (session.user.email || '').split('@')[0] || '';
+      const initialName = metadataName || emailName;
+      setProfileName(initialName);
+      setPatientName(initialName);
+
+      // Pre-fill patient name from profile
+      supabase
+        .from('neuroscan_profiles')
+        .select(
+          'full_name, age, sex, date_of_birth, blood_group, known_conditions, current_medications, allergies, family_history, clinical_notes',
+        )
+        .eq('id', session.user.id)
+        .single()
+        .then(({ data: prof }) => {
+          if (!prof) return;
+          const resolvedName = prof.full_name || metadataName || emailName;
+          setProfileName(resolvedName);
+          setPatientName(resolvedName);
+          setProfileDetails({
+            age: prof.age,
+            sex: prof.sex,
+            date_of_birth: prof.date_of_birth,
+            blood_group: prof.blood_group,
+            known_conditions: prof.known_conditions,
+            current_medications: prof.current_medications,
+            allergies: prof.allergies,
+            family_history: prof.family_history,
+            clinical_notes: prof.clinical_notes,
           });
-      }
-      // Fetch timeline if logged in
-      if (session?.user) {
-        fetch(`${API_URL}/timeline/${session.user.id}`)
-          .then((r) => r.json())
-          .then((d) => setTimeline(d.timeline || []))
-          .catch(() => {});
-      }
+        });
+
+      // Fetch timeline
+      fetch(`${API_URL}/timeline/${session.user.id}`)
+        .then((r) => r.json())
+        .then((d) => setTimeline(d.timeline || []))
+        .catch(() => {});
     });
   }, []);
 
@@ -314,6 +317,21 @@ export default function UploadPage() {
     }
   };
 
+  // Show loading while checking auth
+  if (!authChecked) {
+    return (
+      <>
+        <FloatingHeader />
+        <main className='upload-page' id='upload-page'>
+          <div className='profile-loading' style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <NeuroLoader size={52} color='var(--accent)' />
+            <p style={{ marginTop: 16, color: 'var(--gray-400)', fontSize: '0.9rem' }}>Checking authentication…</p>
+          </div>
+        </main>
+      </>
+    );
+  }
+
   return (
     <>
       <FloatingHeader />
@@ -362,19 +380,6 @@ export default function UploadPage() {
               classification, confidence scores, and attention visualizations
               from the HUFA-Net model.
             </p>
-            {!user && (
-              <p
-                style={{
-                  fontSize: '0.82rem',
-                  color: 'var(--accent)',
-                  marginTop: 8,
-                }}>
-                <a href='/auth' style={{ fontWeight: 600 }}>
-                  Sign in
-                </a>{' '}
-                to automatically save your results.
-              </p>
-            )}
           </div>
 
           {/* Upload Zone */}
