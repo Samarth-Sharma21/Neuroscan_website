@@ -86,7 +86,10 @@ export default function FloatingHeader() {
   const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Features', href: isHome ? '#features' : '/#features' },
-    { label: 'How It Works', href: isHome ? '#how-it-works' : '/#how-it-works' },
+    {
+      label: 'How It Works',
+      href: isHome ? '#how-it-works' : '/#how-it-works',
+    },
     { label: 'Doctors', href: loaded && user ? '/doctors' : '/auth' },
   ];
 
@@ -98,15 +101,18 @@ export default function FloatingHeader() {
     <>
       <header className='floating-header' id='floating-header'>
         {/* Logo */}
-        <Link href='/' className='header-logo' style={{ textDecoration: 'none' }}>
+        <Link
+          href='/'
+          className='header-logo'
+          style={{ textDecoration: 'none' }}>
           <Image
             src='/neuroscan-logo4.png'
-            alt=''
+            alt='NeuroScan Logo'
             className='header-logo-mark'
-            width={28}
-            height={28}
+            width={32}
+            height={32}
           />
-          Neuro<span>scan</span>
+          <span className='header-logo-text'>Neuro<span>scan</span></span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -245,28 +251,41 @@ export default function FloatingHeader() {
 
       {/* Mobile overlay menu */}
       {mobileMenuOpen && (
-        <div className='mobile-menu-backdrop' onClick={() => setMobileMenuOpen(false)}>
+        <div
+          className='mobile-menu-backdrop'
+          onClick={() => setMobileMenuOpen(false)}>
           <nav
             className='mobile-menu-panel'
             ref={mobileMenuRef}
             onClick={(e) => e.stopPropagation()}>
             <div className='mobile-menu-header'>
-              <Link href='/' className='header-logo' style={{ textDecoration: 'none' }}>
+              <Link
+                href='/'
+                className='header-logo'
+                style={{ textDecoration: 'none' }}>
                 <Image
                   src='/neuroscan-logo4.png'
-                  alt=''
+                  alt='NeuroScan Logo'
                   className='header-logo-mark'
-                  width={28}
-                  height={28}
+                  width={32}
+                  height={32}
                 />
-                Neuro<span>scan</span>
+                <span className='header-logo-text'>Neuro<span>scan</span></span>
               </Link>
               <button
                 className='mobile-menu-close'
                 onClick={() => setMobileMenuOpen(false)}
                 aria-label='Close menu'
                 type='button'>
-                <svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.5' strokeLinecap='round' strokeLinejoin='round'>
+                <svg
+                  width='20'
+                  height='20'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2.5'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'>
                   <line x1='18' y1='6' x2='6' y2='18' />
                   <line x1='6' y1='6' x2='18' y2='18' />
                 </svg>
@@ -293,7 +312,8 @@ export default function FloatingHeader() {
                     <div className='mobile-avatar'>{initials}</div>
                     <div>
                       <div className='mobile-user-name'>
-                        {user.user_metadata?.full_name || user.email?.split('@')[0]}
+                        {user.user_metadata?.full_name ||
+                          user.email?.split('@')[0]}
                       </div>
                       <div className='mobile-user-email'>{user.email}</div>
                     </div>
@@ -302,7 +322,15 @@ export default function FloatingHeader() {
                     onClick={handleSignOut}
                     className='mobile-signout-btn'
                     type='button'>
-                    <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                    <svg
+                      width='16'
+                      height='16'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'>
                       <path d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4' />
                       <polyline points='16 17 21 12 16 7' />
                       <line x1='21' y1='12' x2='9' y2='12' />

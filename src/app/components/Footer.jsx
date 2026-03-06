@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { supabase } from '../../lib/supabase';
 
 export default function Footer() {
@@ -29,9 +30,18 @@ export default function Footer() {
         <div className='footer-grid'>
           {/* Brand */}
           <div className='footer-brand'>
-            <p className='footer-brand-name'>
-              Neuro<span>scan</span>
-            </p>
+            <a href='/' className='footer-brand-name'>
+              <span className='footer-brand-logo-pill'>
+                <Image
+                  src='/neuroscan-logo2.png'
+                  alt='NeuroScan Logo'
+                  className='footer-brand-logo-img'
+                  width={30}
+                  height={30}
+                />
+              </span>
+              <span className='footer-logo-text'>Neuro<span>scan</span></span>
+            </a>
             <p className='footer-brand-desc'>
               A final-year research project using deep learning to classify
               dementia stages from brain MRI scans and visualize model

@@ -106,7 +106,7 @@ export default function MobileAppSection() {
 
           <div className="mobileapp-download-btns">
             <a
-              href="https://drive.google.com/file/d/1qCAaZb5tfbUqY5zZOCStrhyw8VuIRnl6/view?usp=drive_link"
+              href="https://drive.google.com/file/d/1EqJw8-Oqz4WcWsShk-Uu2QAGl-4IhaPT/view?usp=drive_link"
               className="mobileapp-download-btn android"
               id="download-android-btn"
               target="_blank"

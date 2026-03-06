@@ -406,17 +406,24 @@
     white-space: nowrap;
   }
   .header-logo-mark {
-    width: 28px;
+    width: 32px;
 
-    height: 28px;
+    height: 32px;
 
     display: block;
 
     flex: 0 0 auto;
 
-    object-fit: contain;
+    object-fit: cover;
+
+    border-radius: 20%;
   }
-  .header-logo span {
+  .header-logo-text {
+    display: inline;
+    white-space: nowrap;
+    color: var(--foreground);
+  }
+  .header-logo-text > span {
     color: var(--accent);
   }
   .header-nav {
@@ -643,8 +650,16 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse at 20% 30%, rgba(44, 102, 110, 0.15) 0%, transparent 55%),
-      radial-gradient(ellipse at 80% 70%, rgba(58, 138, 148, 0.1) 0%, transparent 50%);
+      radial-gradient(
+        ellipse at 20% 30%,
+        rgba(44, 102, 110, 0.15) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse at 80% 70%,
+        rgba(58, 138, 148, 0.1) 0%,
+        transparent 50%
+      );
     pointer-events: none;
   }
   .model-content {
@@ -652,7 +667,9 @@
     margin-bottom: 56px;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.7s var(--transition-smooth), transform 0.7s var(--transition-smooth);
+    transition:
+      opacity 0.7s var(--transition-smooth),
+      transform 0.7s var(--transition-smooth);
   }
   .model-content.model-visible {
     opacity: 1;
@@ -695,7 +712,9 @@
     font-size: 0.78rem;
     font-weight: 500;
     letter-spacing: 0.02em;
-    transition: background 0.3s var(--transition-smooth), border-color 0.3s var(--transition-smooth);
+    transition:
+      background 0.3s var(--transition-smooth),
+      border-color 0.3s var(--transition-smooth);
   }
   .arch-tag:hover {
     background: rgba(44, 102, 110, 0.25);
@@ -707,7 +726,9 @@
     gap: 20px;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.7s var(--transition-smooth) 0.2s, transform 0.7s var(--transition-smooth) 0.2s;
+    transition:
+      opacity 0.7s var(--transition-smooth) 0.2s,
+      transform 0.7s var(--transition-smooth) 0.2s;
   }
   .model-stats-grid.model-visible {
     opacity: 1;
@@ -853,7 +874,9 @@
     overflow: hidden;
     opacity: 0;
     transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
   }
   .stages-section.stages-visible {
     opacity: 1;
@@ -960,8 +983,15 @@
     opacity: 0.5;
   }
   @keyframes stageDotPulse {
-    0%, 100% { r: 4; opacity: 0.3; }
-    50% { r: 6; opacity: 0.8; }
+    0%,
+    100% {
+      r: 4;
+      opacity: 0.3;
+    }
+    50% {
+      r: 6;
+      opacity: 0.8;
+    }
   }
 
   .stages-card-content {
@@ -1164,7 +1194,7 @@
       0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
   .mobileapp-phone-screen {
-    background: linear-gradient(160deg, #0F766E, #0D9488, #14B8A6);
+    background: linear-gradient(160deg, #0f766e, #0d9488, #14b8a6);
     border-radius: 26px;
     padding: 16px 20px 24px;
     min-height: 400px;
@@ -1324,9 +1354,21 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse at 20% 20%, rgba(58, 138, 148, 0.3) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(44, 102, 110, 0.2) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.06) 0%, transparent 40%);
+      radial-gradient(
+        ellipse at 20% 20%,
+        rgba(58, 138, 148, 0.3) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 80% 80%,
+        rgba(44, 102, 110, 0.2) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 50% 0%,
+        rgba(255, 255, 255, 0.06) 0%,
+        transparent 40%
+      );
     pointer-events: none;
   }
   .cta-glow {
@@ -1481,15 +1523,16 @@
    ═══════════════════════════════════════════════════ */
   .site-footer {
     background: var(--foreground);
-
     color: rgba(255, 255, 255, 0.6);
-
     padding: 64px 24px 32px;
+    position: relative;
+    overflow: hidden;
   }
   .footer-inner {
     max-width: 1100px;
-
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
   }
   .footer-grid {
     display: grid;
@@ -1510,9 +1553,43 @@
     color: #ffffff;
 
     margin: 0 0 12px 0;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    text-decoration: none;
   }
-  .footer-brand-name span {
+  /* White pill so logo2 (teal-on-white) reads on dark footer */
+  .footer-brand-logo-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 20%;
+    flex: 0 0 auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+  .footer-brand-logo-img {
+    width: 30px;
+    height: 30px;
+    display: block;
+    flex: 0 0 auto;
+    object-fit: contain;
+    border-radius: 0;
+  }
+  .footer-logo-text {
+    display: inline;
+    white-space: nowrap;
+    color: #ffffff;
+  }
+  .footer-logo-text > span {
     color: var(--accent-light);
+    font-weight: 400;
   }
   .footer-brand-desc {
     font-size: 0.85rem;
@@ -2787,25 +2864,44 @@
   }
   .auth-brand-logo {
     font-family: var(--font-display, 'DM Sans', system-ui, sans-serif);
-
     font-size: 1.4rem;
-
     font-weight: 700;
-
     color: #ffffff;
-
     text-decoration: none;
-
     margin-bottom: 36px;
-
-    display: inline-block;
-
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
     letter-spacing: -0.02em;
   }
-  .auth-brand-logo span {
-    color: rgba(255, 255, 255, 0.5);
-
-    font-weight: 400;
+  /* White rounded wrapper so logo2 (teal-on-white) pops against the teal panel */
+  .auth-logo-img-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: #ffffff;
+    border-radius: 20%;
+    flex: 0 0 auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  .auth-brand-logo-img {
+    width: 36px;
+    height: 36px;
+    display: block;
+    object-fit: contain;
+    border-radius: 0;
+  }
+  /* "Neuro" = crisp white, "scan" = teal accent — mirrors header two-tone on dark bg */
+  .auth-logo-text {
+    display: inline;
+    white-space: nowrap;
+    color: #ffffff;
+  }
+  .auth-logo-text > span {
+    color: #7ecdd6;
+    font-weight: 500;
   }
   .auth-brand-headline-wrapper {
     overflow: hidden;
@@ -4481,8 +4577,12 @@
     animation: fadeIn 0.2s ease-out;
   }
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   /* ─── Mobile Menu Panel ─── */
@@ -4503,8 +4603,12 @@
     animation: slideInRight 0.3s var(--transition-smooth);
   }
   @keyframes slideInRight {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
   }
 
   .mobile-menu-header {
@@ -4525,7 +4629,9 @@
     border-radius: 10px;
     cursor: pointer;
     color: var(--gray-600);
-    transition: background 0.2s, color 0.2s;
+    transition:
+      background 0.2s,
+      color 0.2s;
   }
   .mobile-menu-close:hover {
     background: var(--gray-200);
@@ -4544,8 +4650,14 @@
     animation: fadeSlideIn 0.3s ease-out both;
   }
   @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateX(20px); }
-    to { opacity: 1; transform: translateX(0); }
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
   .mobile-nav-list a {
     display: flex;
@@ -4555,7 +4667,9 @@
     font-weight: 500;
     color: var(--foreground);
     text-decoration: none;
-    transition: background 0.2s, color 0.2s;
+    transition:
+      background 0.2s,
+      color 0.2s;
     border-radius: 0;
   }
   .mobile-nav-list a:hover {

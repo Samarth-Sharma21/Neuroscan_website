@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabase';
 import NeuroLoader from '../components/NeuroLoader';
@@ -110,7 +111,16 @@ export default function AuthPage() {
         <div className='auth-brand'>
           <div className='auth-brand-inner'>
             <a href='/' className='auth-brand-logo'>
-              Neuro<span>scan</span>
+              <span className='auth-logo-img-wrapper'>
+                <Image
+                  src='/neuroscan-logo2.png'
+                  alt='NeuroScan Logo'
+                  className='auth-brand-logo-img'
+                  width={40}
+                  height={40}
+                />
+              </span>
+              <span className='auth-logo-text'>Neuro<span>scan</span></span>
             </a>
 
             <div className='auth-brand-headline-wrapper'>
