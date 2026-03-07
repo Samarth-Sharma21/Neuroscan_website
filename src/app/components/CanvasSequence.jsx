@@ -29,13 +29,14 @@ function padNumber(num, size) {
 }
 
 export default function CanvasSequence({ heroRef }) {
-  const canvasRef     = useRef(null);
-  const imagesRef     = useRef(new Array(TOTAL_FRAMES).fill(null));
-  const loadedSetRef  = useRef(new Set());
-  const currentFrame  = useRef(0);
-  const rafPending    = useRef(false);
-  const isReadyRef    = useRef(false);
-  const configRef     = useRef(null);
+  const canvasRef          = useRef(null);
+  const imagesRef          = useRef(new Array(TOTAL_FRAMES).fill(null));
+  const loadedSetRef       = useRef(new Set());
+  const currentFrame       = useRef(0);
+  const rafPending         = useRef(false);
+  const isReadyRef         = useRef(false);
+  const configRef          = useRef(null);
+  const totalActiveFrames  = useRef(TOTAL_FRAMES); // actual frames we'll load (less on mobile)
   const [loadProgress, setLoadProgress] = useState(0);
 
   /* ── Draw helpers ── */
@@ -139,41 +140,39 @@ export default function CanvasSequence({ heroRef }) {
     const config = configRef.current;
     const { frameStep } = config;
 
+    // Compute how many frames we'll actually load so the progress bar reaches 100%
+    const activeCount = Math.ceil(TOTAL_FRAMES / frameStep);
+    totalActiveFrames.current = activeCount;
+
     const PRIORITY_STEP  = frameStep * (config.isMobile ? 12 : 8);
     const SECONDARY_STEP = frameStep * (config.isMobile ? 6  : 4);
-    const BATCH_SIZE     = config.isMobile ? 4 : 8;
-    const BATCH_DELAY    = config.isMobile ? 40 : 20;
+    // More parallel requests = faster finish; mobile handles 6 fine with WebP
+    const BATCH_SIZE     = config.isMobile ? 6 : 10;
 
     // Phase 1 — first frame immediately
     await loadImage(1);
     isReadyRef.current = true;
     drawFrame(0);
 
-    // Phase 2 — priority skeleton
+    // Phase 2 — priority skeleton (no delays — fire and forget batches)
     const phase2 = [];
     for (let i = 1; i <= TOTAL_FRAMES; i += PRIORITY_STEP) if (i !== 1) phase2.push(i);
-    for (let b = 0; b < phase2.length; b += BATCH_SIZE) {
+    for (let b = 0; b < phase2.length; b += BATCH_SIZE)
       await Promise.all(phase2.slice(b, b + BATCH_SIZE).map(loadImage));
-      if (b > 0) await new Promise(r => setTimeout(r, BATCH_DELAY));
-    }
 
     // Phase 3 — fill gaps
     const phase3 = [];
     for (let i = 1; i <= TOTAL_FRAMES; i += SECONDARY_STEP)
       if (!loadedSetRef.current.has(i - 1)) phase3.push(i);
-    for (let b = 0; b < phase3.length; b += BATCH_SIZE) {
+    for (let b = 0; b < phase3.length; b += BATCH_SIZE)
       await Promise.all(phase3.slice(b, b + BATCH_SIZE).map(loadImage));
-      if (b > 0) await new Promise(r => setTimeout(r, BATCH_DELAY));
-    }
 
     // Phase 4 — all remaining frames at frameStep intervals
     const phase4 = [];
     for (let i = 1; i <= TOTAL_FRAMES; i += frameStep)
       if (!loadedSetRef.current.has(i - 1)) phase4.push(i);
-    for (let b = 0; b < phase4.length; b += BATCH_SIZE) {
+    for (let b = 0; b < phase4.length; b += BATCH_SIZE)
       await Promise.all(phase4.slice(b, b + BATCH_SIZE).map(loadImage));
-      if (b > 0) await new Promise(r => setTimeout(r, BATCH_DELAY));
-    }
   }, [loadImage, drawFrame]);
 
   /* ── Init ── */
@@ -193,7 +192,8 @@ export default function CanvasSequence({ heroRef }) {
     };
   }, [onScroll, drawFrame]);
 
-  const pct = Math.round((loadProgress / TOTAL_FRAMES) * 100);
+  // Divide by actual active frames (not TOTAL_FRAMES) — on mobile frameStep=2 means 120 frames total
+  const pct = Math.min(100, Math.round((loadProgress / totalActiveFrames.current) * 100));
 
   return (
     <div className="canvas-layer">
