@@ -4,6 +4,12 @@
 
 **Neuro-Scan** is a deep learning-powered medical imaging system designed to analyze MRI scans. This repository contains the source code for the **web-based interface** built with Next.js, integrating our custom machine learning models (PyTorch) for fast and reliable inference. 
 
+---
+
+## 🌐 About & Live Demo
+You can try out the live version of the Neuro-Scan Web application here:
+👉 **[Neuro-Scan Web - Live Demo](https://neuroscan-web.netlify.app/)**
+
 > **Mobile Application Repository:** Please note that the companion mobile application for Neuro-Scan can be found here: [Neuroscan_Mobile](https://github.com/Samarth-Sharma21/Neuroscan_Mobile). Both clients interface with the same underlying AI infrastructure to provide cross-platform accessibility.
 
 ---
