@@ -1,9 +1,5 @@
-[build]
-  command = "npm run build"
-  publish = ".next"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+# No explicit build directory needed for Next.js 13+ on Netlify
+# Netlify's build process handles the Serverless functions automatically
 
 # ── Long-term CDN caching for static brain frame images ──────────────────────
 # These files are content-addressed by folder (webp/webp-mobile) so they never
