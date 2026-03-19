@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Neuro-Scan: Website & Web Application
 
-## Getting Started
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-First, run the development server:
+**Neuro-Scan** is a deep learning-powered medical imaging system designed to analyze MRI scans. This repository contains the source code for the **web-based interface** built with Next.js, integrating our custom machine learning models (PyTorch) for fast and reliable inference. 
 
+> **Mobile Application Repository:** Please note that the companion mobile application for Neuro-Scan can be found here: [Neuroscan_Mobile](https://github.com/Samarth-Sharma21/Neuroscan_Mobile). Both clients interface with the same underlying AI infrastructure to provide cross-platform accessibility.
+
+---
+
+## 🎯 Purpose and Software Impact
+This repository accompanies our submission to the *Software Impacts* journal. The Neuro-Scan web application makes advanced neurological MRI analysis accessible to clinical researchers and practitioners through an intuitive interface. It demonstrates a scalable architecture integrating modern web frameworks with complex Python-based deep learning workflows, highlighting reproducibility and ease-of-use.
+
+## ✨ Features
+- **Medical Image Upload & Processing:** Secure upload and visualization of MRI scans.
+- **AI-Powered Analysis:** Seamless integration with PyTorch-based deep learning models for classification/segmentation.
+- **Scalable Architecture:** Built on Next.js with React, ensuring high performance, SEO optimization, and an excellent user experience.
+- **Cross-Platform Ecosystem:** Integrates seamlessly with our [Mobile App (Expo)](https://github.com/Samarth-Sharma21/Neuroscan_Mobile).
+
+---
+
+## 🛠️ Required Dependencies
+Before running the application, ensure your reproducible environment meets the following compilation requirements:
+- **Node.js** (v18.x or above)
+- **Machine Learning Backend** (If running locally): Python 3.8+, PyTorch, NumPy, Pandas, Scikit-learn
+- **Frontend Stack**: Next.js, React.js
+
+---
+
+## 🚀 Getting Started (How-to Guide)
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Samarth-Sharma21/Neuroscan_website.git
+cd Neuroscan_website
 ```
 
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Environment Variables
+Create a `.env.local` file in the root directory and add the required API keys and configuration parameters (e.g., Hugging Face endpoints, Supabase configuration, or local backend URLs).
+
+### 4. Run the development server
+```bash
+npm run dev
+```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📂 Repository Structure
+- `src/` - Contains the main Next.js App Router source code.
+- `public/` - Static assets and images.
+- `model/` - Configurations, HuggingFace inference abstractions, or client-side interfaces dealing with the ML model.
+- `supabase/` - Database schema, initialization, and configuration files for Supabase backend.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 License & Legal
+This project is licensed under the **MIT License**. See the `LICENSE` file for full details.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📚 Citation
+If you use this software in your research, please cite our corresponding paper in *Software Impacts*:
+```bibtex
+@article{neuroscan202X,
+  title={Neuro-Scan: ...},
+  author={Sharma, Samarth and ...},
+  journal={Software Impacts},
+  year={202X}
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ✉️ Support
+For questions, support, or access to the reproducible capsule, please contact: **Samarthsharma7621@gmail.com**
