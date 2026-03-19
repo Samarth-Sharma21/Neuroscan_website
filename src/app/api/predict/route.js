@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 
 // Get environment variables
 const HF_ACCESS_TOKEN = process.env.HF_ACCESS_TOKEN;
-const HF_API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://samarth-21-neuroscan-api.hf.space';
+let rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://samarth-21-neuroscan-api.hf.space';
+const HF_API_URL = rawApiUrl.replace(/\/+$/, '');
 
 export async function POST(request) {
   try {
